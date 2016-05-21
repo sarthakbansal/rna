@@ -340,7 +340,7 @@ public class SignUpLoginController {
 	
 	@RequestMapping(value="/ViewData", method = RequestMethod.POST)
 //	public @ResponseBody ArrayList<Map<String,String>> ViewData(HttpServletRequest request) {
-
+// Added some shit comment
 	public @ResponseBody ModelAndView ViewData(HttpServletRequest request) {
 
 		String username = request.getParameter("username");
