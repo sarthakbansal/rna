@@ -23,11 +23,10 @@ public class UserSignUp {
 	@NotEmpty
 	private String username;
 	
-	@Size(min=6,max=15)
+	
 	@NotEmpty
 	private String password;
-	
-	@Email
+
 	private String email;
 
 	private Address userAddress;

@@ -92,21 +92,20 @@
 			<ul id = "company">
 				<li id="bookTruck">Book a Truck</li>
 				<div class="company">
-				
 					<table>
 						<tr>
 							<td>Source : </td>
 							<td>
-								<select name='source' id="source">
-									<option value="chose2" selected disabled>Chose source</option>
-									<c:if test="${not empty lists3}">
-										<c:forEach var="listValue" items="${lists3}">
+								<select name='source' id="sourceName">
+									<option  selected disabled>Chose source</option>
+									<c:if test="${not empty sourceList}">
+										<c:forEach var="listValue" items="${sourceList}">
 											<option value = "${listValue.locationName}" >${listValue.locationName}</option>
 										</c:forEach>
 									</c:if>
 								</select>
 							</td>
-							<td><span id="sourceName" class="error"></span></td>
+							<td><span id="sourceError" class="error"></span></td>
 						</tr>
 						<tr class="location">
 							<td>Location : </td>
@@ -136,16 +135,16 @@
 						<tr>
 							<td>Destination: </td>
 							<td >
-								<select name='dest' id="dest" disabled>
-									<option value="chose3" selected disabled>Chose destination</option>
+								<select name='destination' id="destinationName" disabled>
+									<option selected disabled>Chose destination</option>
 								</select>
 							</td>
-							<td><span id="destinationName" class="error"></span></td>
+							<td><span id="destinationError" class="error"></span></td>
 						</tr>
 						<tr class="location">
 							<td>Location : </td>
 								<td class="destLocation">
-									<select id="destAddress">
+									<select id="destinationAddress">
 									</select>	
 								</td>
 								<td class="destLocation">
@@ -170,25 +169,25 @@
 						<tr>
 							<td>Type of truck : </td>
 							<td>
-								<select name='dest' id="trucktype">
-									<option value="chose" selected disabled>Chose truck type</option>
-									<c:if test="${not empty lists5}">
-										<c:forEach var="listValue" items="${lists5}">
+								<select id="trucktype">
+									<option  selected disabled>Chose truck type</option>
+									<c:if test="${not empty truckTypeList}">
+										<c:forEach var="listValue" items="${truckTypeList}">
 											<option value = "${listValue.truckType}" >${listValue.truckType}</option>
 										</c:forEach>
 									</c:if>
 								</select>
 							</td>
-							<td><span id="truckType" class="error"></span></td>
+							<td><span id="truckTypeError" class="error"></span></td>
 						</tr>
 						<tr>
-							<td>Date of Booking : </td><td><input type="date" id="txtdate" min="" /></td>
-							<td><span id="bookingDate" class="error"></span></td>
+							<td>Date of Booking : </td><td><input type="date" id="bookingDate" min="" /></td>
+							<td><span id="bookingDateError" class="error"></span></td>
 						</tr>
 					</table>
 					
 					<br>
-					<input type="hidden" id="c_id" value="${companyid}" />
+					<input type="hidden" id="companyId" value="${companyId}" />
 					<input type="submit" id="booktruck" value="Book">
 					<br>
 					<span class="message"></span>

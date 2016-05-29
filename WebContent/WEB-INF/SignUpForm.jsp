@@ -53,26 +53,68 @@
 		<br>
 		<h3>Sign Up Form</h3>
 		<br>
-		<form:form action="/RNA/signupSuccess" commandName="userSignUp" method="post">
-			<table>
-			
-				<tr><td id='1'>Name : </td><td><input type="text" name="name" /></td><td><form:errors path="name" class="error"/></td></tr>
-				<tr><td id='2'>Mobile No. : </td><td><input minlength=10 maxlength=10 type="text" name="mobile" /></td><td><form:errors path="mobile" class="error"/><span class="error">${msg3}</span></td></tr>
-				<tr><td>Username :    		</td>  <td>       <input type="text" name="username" /></td><td><form:errors path="username" class="error"/><span class="error">${msg1}</span></td></tr>
-				<tr><td id='3'>Email (optional) :    		</td>  <td id='4'>       <input type="text" name="email" />    </td> <td>       <form:errors path="email" class="error"/><span class="error">${msg2}</span></td></tr>
-			<tr><td>Password :    		</td>  <td>       <input type="password" name="password" />    </td> <td>       <form:errors path="password" class="error"/>   </td>  </tr>
-
-		 
-			<tr>
-				
-				<td>Street:     </td> <td>        <input type="text" name="userAddress.street" /></td></tr> 
-				<tr><td>City:     </td> <td>        <input type="text" name="userAddress.city" /></td><td>       <form:errors path="userAddress.city" class="error"/> </td></tr>
-				<tr><td>Pincode:     </td> <td>      <input minlength=6 maxlength=6 type="text" name="userAddress.pincode" /></td></tr>
-				<tr><td>Country:     </td> <td>      <input type="text" name="userAddress.country" /></td><td>       <form:errors path="userAddress.country" class="error"/> </td>
-			</tr>
-			<tr><td>User Type : </td><td>Company : <input type="radio"  name="userType" value="company" /> Transporter : <input type="radio" checked name="userType" value="transporter" /></td><td></td></tr>
-			<tr><td><input  type="submit" value="Sign Up" /></td><td><a href="/RNA/login">Already a member, Login !</a></td></tr>
-		</table>
+		<form:form id ="signupForm" action="/RNA/login" commandName="userSignUp" method="post" >
+			<table >
+				<tr>
+					<td id='user-name'>Name : </td>
+					<td><input type="text" name="name" /></td><td><span class="error"></span></td>
+				</tr>
+				<tr>
+					<td id='user-contact'>Mobile No. : </td>
+					<td><input minlength=10 maxlength=10 type="text" name="mobile" /></td>
+					<td><span class="error"></span></td>
+				</tr>
+				<tr>
+					<td>Username : </td>  
+					<td><input type="text" name="username" /></td>
+					<td><span class="error"></span></td>
+				</tr>
+				<tr>
+					<td id='user-email'>Email :</td>  
+					<td ><input type="email" name="email" /></td> 
+					<td><span class="error"></span></td>
+				</tr>
+				<tr>
+					<td>Password :</td>  
+					<td><input type="password" minlength=6 maxlength=15 name="password" /></td> 
+					<td><span class="error"></span></td>  
+				</tr>
+				<tr>
+					<td>Confirm Password :</td>  
+					<td><input type="password" name="confirm-password" /></td> 
+					<td><span class="error"/></span></td>  
+				</tr>
+				<tr>
+					<td>Street:</td> 
+					<td><input type="text" name="userAddress.street" /></td>
+					<td><span class="error"></span></td> 
+				</tr> 
+				<tr>
+					<td>City:</td> 
+					<td><input type="text" name="userAddress.city" /></td>
+					<td><span class="error"/></span></td>
+				</tr>
+				<tr>
+					<td>Pincode:</td> 
+					<td><input minlength=6 maxlength=6 type="text" name="userAddress.pincode" /></td>
+					<td><span class="error"/></span></td>
+				</tr>
+				<tr>
+					<td>Country:</td>
+					<td><input type="text" value = "INDIA" name="userAddress.country" disabled /></td>
+				</tr>
+				<tr>
+					<td>User Type : </td>
+					<td>Company : <input type="radio"  value="company" /> Transporter : <input type="radio" checked name="userType" value="transporter" /></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td><input  type="submit" value="Sign Up" id="signUp" /></td>
+					<td><a href="/RNA/login">Already a member, Login !</a></td>
+				</tr>
+			</table>
+			<br>
+			<span class="message" ></span>
 		</form:form>
  	</div>
 </body>

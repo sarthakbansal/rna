@@ -74,80 +74,77 @@
 				
 					<table>
 						<tr><td>Truck Registration Number :</td>
-							<td><input type="text" id="reg-no" value="" /></td>
-							<td><span id="regName" class="error"></span></td>
+							<td><input type="text" id="registerationNumber" value="" /></td>
+							<td><span id="registerationError" class="error"></span></td>
 						</tr>
 						<tr><td>Type of truck : </td>
 							<td>
-								<select name='dest' id="trucktype">
+								<select id="trucktype">
 									<option value="chose" selected disabled>Chose truck type</option>
-									<c:if test="${not empty lists5}">
-										<c:forEach var="listValue" items="${lists5}">
+									<c:if test="${not empty truckTypeList}">
+										<c:forEach var="listValue" items="${truckTypeList}">
 											<option value = "${listValue.truckType}" >${listValue.truckType}</option>
 										</c:forEach>
 									</c:if>
 								</select>
 							</td>
-							<td><span id="truckType" class="error"></span></td>
+							<td><span id="truckTypeError" class="error"></span></td>
 						</tr>
 						<tr>
 							<td>Source : </td>
 							<td>
-								<select name='source' id="source">
+								<select name='source' id="sourceName">
 									<option value="chose2" selected disabled>Chose Source</option>
-									<c:if test="${not empty lists3}">
-										<c:forEach var="listValue" items="${lists3}">
+									<c:if test="${not empty sourceList}">
+										<c:forEach var="listValue" items="${sourceList}">
 											<option value = "${listValue.locationName}" >${listValue.locationName}</option>
 										</c:forEach>
 									</c:if>
 								</select>
 							</td>
-							<td><span id="sourceName" class="error"></span></td>
+							<td><span id="sourceError" class="error"></span></td>
 						</tr>
 						<tr>
 							<td>Destination: </td>
 							<td>
-								<div id="div1">
-								<select name='dest' id="dest">
+								<select  id="destinationName">
 									<option value="chose3" selected disabled>Chose Destination</option>
-									<c:if test="${not empty lists4}">
-										<c:forEach var="listValue" items="${lists4}">
+									<c:if test="${not empty destinationList}">
+										<c:forEach var="listValue" items="${destinationList}">
 											<option value = "${listValue.locationName}" >${listValue.locationName}</option>
 										</c:forEach>
 									</c:if>
 								</select>
 								</div>
-								<div id ="div2" style="display : none;">
-								</div>
 							</td>
-							<td><span id="destinationName" class="error"></span></td>
+							<td><span id="destinationError" class="error"></span></td>
 						</tr>
 						<tr>
-							<td>PAN Number : </td><td><input type="text" id="pan" value="" /></td>
-							<td><span id="panName" class="error"></span></td>
+							<td>PAN Number : </td><td><input type="text" id="panNumber" value="" /></td>
+							<td><span id="panError" class="error"></span></td>
 						</tr>
 					</table>
 					<table>
 						<h4>Driver's details</h4>
 						<tr>
 							<td>Name : </td>
-							<td><input type="text" id="name" value="" /></td>
-							<td><span id="Name" class="error"></span></td>
+							<td><input type="text" id="driver-name" value="" /></td>
+							<td><span id="driverNameError" class="error"></span></td>
 						</tr>
 						<tr>
 							<td>Mobile Number : </td>
-							<td><input type="text" id="mobile" value="" /></td>
-							<td><span id="Mobile" class="error"></span></td>
+							<td><input type="text" id="driver-mobile" value="" /></td>
+							<td><span id="mobileError" class="error"></span></td>
 						</tr>
 					</table>
 					<br>
-					<input type="hidden" id="userName"value="${username}" />
+					<input type="hidden" id="userName" value="${username}" />
 					<input type="submit" id="registerTruck" value="submit">
 					<br>
 					<span class="message"></span>
 				
 				</div>
-				<li id="viewTrucks" name="${username}">View Trucks</li>
+				<li id="viewTrucks">View Trucks</li>
 				<div class="transporter">
 				</div>
 				<li id="Bookings" ></li>

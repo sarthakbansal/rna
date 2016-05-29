@@ -8,9 +8,9 @@
 	<script src = "${functionJS}" ></script>
 
 <table  cellpadding="10" style="border-collapse: collapse;">
-	<c:if test="${not empty list}">
+	<c:if test="${not empty companyList}">
 		<h3>Company Details</h3>
-		<c:forEach var="listvalue" items="${list}" varStatus="rowStatus">
+		<c:forEach var="listvalue" items="${companyList}" varStatus="rowStatus">
 			<c:if test="${rowStatus.count < 2}">
 				<tr><td>Company Name : </td><td class="companyDetails" contenteditable="false">${listvalue.name}</td><td class="error"></td></tr>
 				<tr><td>Contact : </td><td class="companyDetails" contenteditable="false">${listvalue.mobile}</td><td class="error"></td></tr>
@@ -22,9 +22,9 @@
 	</c:if>
 </table><br>
 <table border="1" cellpadding="10" style="border-collapse: collapse;">
-	<c:if test="${not empty list}">
+	<c:if test="${not empty companyList}">
 		<tr><td>Routes</td>
-		<c:forEach var="listvalue" items="${list}" >
+		<c:forEach var="listvalue" items="${companyList}" >
 			<td id = "${listvalue.routeId}">${listvalue.sourceId} - ${listvalue.destinationId}</td>
 		</c:forEach>
 		</tr>

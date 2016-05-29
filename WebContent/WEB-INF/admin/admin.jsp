@@ -63,30 +63,30 @@
 		<br>
 		<div class="submain">
 			<ul id="admin">
-				<li id="destination">Add Route</li>
+				<li id="Route">Add Route</li>
 				<div class="admin">
 				
 					<table>
 					<tr><td>Name of the company :</td>
-					<td><select name='companyID' id="companyList">
+					<td><select id="companyName">
 						<option value="chose1" selected disabled>Chose Company</option>
-						<c:if test="${not empty lists2}">
-							<c:forEach var="listValue" items="${lists2}">
+						<c:if test="${not empty companyList}">
+							<c:forEach var="listValue" items="${companyList}">
 								<option value = "${listValue.companyId}" >${listValue.name}</option>
 							</c:forEach>
 						</c:if>
 					</select>
 					</td>
 					<td>
-						<span id="companyNames" class="error"></span>
+						<span id="companyNameError" class="error"></span>
 					</td></tr>
 					<tr>
 						<td>Source : </td>
 						<td>
-							<select name='source' id="source">
+							<select  id="sourceName">
 								<option value="chose2" selected disabled>Chose Source</option>
-								<c:if test="${not empty lists3}">
-									<c:forEach var="listValue" items="${lists3}">
+								<c:if test="${not empty sourceList}">
+									<c:forEach var="listValue" items="${sourceList}">
 										<option value = "${listValue.locationName}" >${listValue.locationName}</option>
 									</c:forEach>
 								</c:if>
@@ -96,60 +96,57 @@
 						<td class="route">
 							<input type = "text" id="sourceAdd" value="" />
 						</td>
+						<td><span id="sourceError" class="error"></span></td>
 						<td class="route">
 							<span id="listSource" style="cursor: pointer; text-decoration: underline; color: blue;">Chose from the list</span>
 						</td>
-						<td><span id="sourceName" class="error"></span></td>
+						
 					</tr>
 					<tr>
 						<td>Destination: </td>
 						<td>
-							<div id="div1">
-							<select name='dest' id="dest">
-								<option value="chose3" selected disabled>Chose Destination</option>
-								<c:if test="${not empty lists4}">
-									<c:forEach var="listValue" items="${lists4}">
+							<select  id="destinationName">
+								<option value="chose3"  selected disabled>Chose Destination</option>
+								<c:if test="${not empty destinationList}">
+									<c:forEach var="listValue" items="${destinationList}">
 										<option value = "${listValue.locationName}" >${listValue.locationName}</option>
 									</c:forEach>
 								</c:if>
 								<option value="other3">Other..</option>
 							</select>
-							</div>
-							<div id ="div2" style="display : none;">
-							</div>
 						</td>
 						<td class = "route">
 							<input type= "text" name='destinationName' id="destinationAdd" value="" />
 						</td>
+						<td><span id="destinationError" class="error"></span></td>
 						<td class="route">
 							<span id="listDestination" style="cursor: pointer; text-decoration: underline; color: blue;">Chose from the list</span>
 						</td>
-						<td><span id="destinationName" class="error"></span></td>
 					</tr>
 					<tr><td>Type of truck : </td>
 					<td>
-						<c:if test="${not empty lists5}">
-							<c:forEach var="listValue" items="${lists5}">
+						<c:if test="${not empty truckTypeList}">
+							<c:forEach var="listValue" items="${truckTypeList}">
 									<input type="checkbox" name='trucktype' value="${listValue.truckType}"/>${listValue.truckType}
 							</c:forEach>
 						</c:if>
 					</td>
-					<td><span id="truckType" class="error"></span></td>
+					<td><span id="truckTypeError" class="error"></span></td>
 					</tr>
 					</table>
 					<br>
-					<input type="submit" id="addDestination" value="submit">
+					<input type="submit" id="addRoute" value="submit">
 					<br>
 					<span class="message"></span>
 				
 				</div>
-				<li id="truck">View Trucks</li>
+				<li id="adminViewTruck">View Trucks</li>
 				<div class="admin"></div>
-				<li id = "transporter" >View Transporters</li>
+				<li id = "adminViewTransporter" >View Transporters</li>
 				<div class="admin"><br>
 					
 				</div>
-				<li id="company">View Company</li>
+				<li id="adminViewCompany">View Company</li>
 				<div class="admin"><br>
 					
 				</div>

@@ -12,33 +12,201 @@ $(document).ready(function(){
         day = '0' + day.toString();
 
     var minDate = year + '-' + month + '-' + day;    
-    $('#txtdate').attr('min', minDate);
+    $('#bookingDate').attr('min', minDate);
 	
-	$("input[type='radio']").click(function(){
+    $("#loginForm").submit(function(e){
+    	
+    	var flag=0;
+    	var loginForm = this;
+    	e.preventDefault();
+    	var username, password, usertype;
+    	$("input").each(function(){
+    		if($(this).val() == ""){
+    			flag=1;
+    			$(this).parent().next().children().text("Please fill in this field !");
+    			return false;
+    		}
+    	});
+    	if(flag == 0){
+    		username = $("input[type=text]").val();
+    		password = $("input[type=password]").val();
+    		usertype = $("input[type=radio]:checked").val();
+    		
+	    	$.ajax({
+				url: "/RNA/checkLogin",
+				type: "POST",
+				data: "username="+username+"&password="+password+"&userType="+usertype,
+				success: function(data){
+					if(data[0].message == "success"){
+						loginForm.submit();
+					}
+					else{
+						$("#loginForm .error_message").html(data[0].message);	
+					}
+				}
+			});
+    	}
+    });
+    
+    $("#signupForm").submit(function(e){
+    	var flag=0;
+    	var username, password, userType, name, attribute, mobile, email, confirmPassword, street, city, pincode, country;
+    	var signupForm = this;
+    	e.preventDefault();
+    	$("input").each(function(){
+    		if($(this).val() == ""){
+    			flag=1;
+    			$(this).parent().next().children().text("Please fill in this field !");
+    			return false;
+    		}
+    	});
+    	if(flag == 0){
+    		userType = $("input[type=radio]:checked").val();
+    		$("input").each(function(){
+    			attribute = $(this).attr("name");
+    			
+        		if(attribute == "name"){
+        			name = $(this).val();
+        		}
+        		else if(attribute == "mobile"){
+        			mobile = $(this).val();
+        		}
+        		else if(attribute == "username"){
+        			username = $(this).val();
+        		}
+        		else if(attribute == "password"){
+        			password = $(this).val();
+        		}
+        		else if(attribute == "email"){
+        			email = $(this).val();
+        		}
+        		else if(attribute == "confirm-password"){
+        			confirmPassword = $(this).val();
+        			if(confirmPassword != password){
+        				$(this).parent().next().children().text("Password does not match !");
+        				flag=1;
+        			}        				
+        		}
+        		else if(attribute == "userAddress.pincode"){
+        			pincode = $(this).val();
+        		}
+        		else if(attribute == "userAddress.street"){
+        			street = $(this).val();
+    			}
+        		else if(attribute == "userAddress.city"){
+        			city = $(this).val();
+        		}
+        		else if(attribute == "userAddress.country"){
+        			country = $(this).val();
+        		}
+    		});
+    		if(flag==0){
+    			var address = street + " Street " + city + " " + pincode + " " + country;
+		    	$.ajax({
+					url: "/RNA/checkSignUp",
+					type: "POST",
+					data: "username="+username+"&password="+password+"&userType="+userType+"&name="+name+"&mobile="+mobile+"&email="+email+"&address="+address,
+					success: function(data){
+						if(data[0].status == "success")
+						{
+							window.open("http://www.w3schools.com");
+							$("span.message").html(data[0].message);	
+							setTimeout(function(){ 
+								window.location.href = "/RNA/login"; 
+							}, 3000);
+						}
+						else{
+							$("input").each(function(){
+								
+								$("span.message").html(data[0].message);
+				    			attribute = $(this).attr("name");
+				    			
+				    			if(attribute == "username"){
+				    				$(this).parent().next().children().text(data[0].error_message1);
+				    			}
+				    			else if(attribute == "email"){
+				    				$(this).parent().next().children().text(data[0].error_message2);
+				    			}
+				    			else if(attribute == "mobile"){
+				    				$(this).parent().next().children().text(data[0].error_message3);
+				    			}
+				    		});
+						}
+					}
+				});
+    		}
+    	}
+    });
+    
+    $("#loginForm input, #signupForm input").each(function(){
+		$(this).focus(function(){
+			if($(this).attr("id")!="signUp"){
+				$(this).parent().next().children().text("");
+				$(".error_message, .message").text("");
+			}
+		});
+	});
+    
+	$("#signupForm input[type='radio']").click(function(){
 		
 		if( $(this).val() == "company" )
 		{
-			$('#1').text("Name of company :");
-			$('#2').text("Phone no. :");
-			$('#3').text("Email :");
-			$('#4').html("<input type='email' name='email' required />");
+			$('#user-name').text("Name of company :");
+			$('#user-contact').text("Phone no. :");
 		}
 		else
 		{
-			$('#1').text("Name :");
-			$('#2').text("Mobile no. :");
-			$('#3').text("Email(optional) :");
-			$('#4').html("<input type='email' name='email'  />");
+			$('#user-name').text("Name :");
+			$('#user-contact').text("Mobile no. :");
 		}
 	});
 	
+	$("#adminLoginForm").submit(function(e){
+    	
+    	var flag=0;
+    	var adminLogin = this;
+    	e.preventDefault();
+    	var username, password;
+    	$("input").each(function(){
+    		if($(this).val() == ""){
+    			flag=1;
+    			$(this).parent().next().children().text("Please fill in this field !");
+    			return false;
+    		}
+    	});
+    	if(flag == 0){
+    		username = $("input[type=text]").val();
+    		password = $("input[type=password]").val();
+    		
+	    	$.ajax({
+				url: "/RNA/admin/checkAdminLogin",
+				type: "POST",
+				data: "username="+username+"&password="+password,
+				success: function(data){
+					if(data[0].message == "success"){
+						adminLogin.submit();
+					}
+					else{
+						$("#adminLoginForm .error_message").html(data[0].message);	
+					}
+				}
+			});
+    	}
+    });
+	
 	$("#admin li").click(function(){
-		//alert( $(this).attr("id") );
-		var tablename;
+		
+		var tablename = "";
 		$(".admin").hide();
 		$(this).next().toggle();
-		tablename = $(this).attr("id");
-		if(tablename != "destination"){
+		var id = $(this).attr("id");
+		if(id != "Route"){
+			
+			if(id=="adminViewTransporter")
+				tablename = "transporter";
+			else if(id=="adminViewCompany")
+				tablename = "company"; 
+			
 			var div=$(this).next();
 			$.ajax({
 				url: "/RNA/admin/adminViewData",
@@ -48,48 +216,48 @@ $(document).ready(function(){
 					div.html(data);
 					setTimeout(function(){ 
 						$(this).parent().toggle(); 
-						}, 5000);
+					}, 5000);
 					
 				}
 			});
 		}
 	});
-	$("#addDestination").click(function(e) {
+	$("#addRoute").click(function(e) {
 		
 		var flag=0;
 		if($('input[type=checkbox]:checked').length == 0)
 		{
-			$("#truckType").text("Chose atleast one truck type !");
+			$("#truckTypeError").text("Chose atleast one truck type !");
 			flag=1;
 		}
 		
-		if($('#companyList option:selected').text() == "Chose Company")
+		if($('#companyName option:selected').text() == "Chose Company")
 		{
-			$("#companyNames").text("Chose a company !");
+			$("#companyNameError").text("Chose a company !");
 			flag=1;
 		}
 		
-		var source = $("#sourceAdd").val();
-		if(source=="")
-			source = $("#source").val();
+		var sourceName = $("#sourceAdd").val();
+		if(sourceName == "" )
+			sourceName = $("#sourceName").val();
 		
-		if(source == null)
+		if(sourceName == null)
 		{
-			$("#sourceName").text("Chose a source !");
+			$("#sourceError").text("Chose a source !");
 			flag=1;
 		}
 		
-		var destination = $("#destinationAdd").val();
-		if(destination=="")
-			destination = $("#dest").val();
+		var destinationName = $("#destinationAdd").val();
+		if(destinationName == "")
+			destinationName = $("#destinationName").val();
 		
-		if(destination == null)
+		if(destinationName == null)
 		{
-			$("#destinationName").text("Chose a destination !");
+			$("#destinationError").text("Chose a destination !");
 			flag=1;
 		}
 		
-		if(source == destination && source != null){
+		if(sourceName == destinationName && sourceName != null){
 			alert("Source and Destination can't be same !")
 			flag=1;
 		}
@@ -99,12 +267,12 @@ $(document).ready(function(){
 			 var trucktype = $("input[type=checkbox]:checked").map(
 				     function () {return this.value;}).get().join(",");
 			 
-			 //alert($('#companyList').val() +" "+ destination +" "+ trucktype +" "+ source);
+			 
 			 var div = $(this).parent();
 			 $.ajax({
-					url: "/RNA/admin/addDestination",
+					url: "/RNA/admin/addRoute",
 					type: "POST",
-					data: "companyID="+$('#companyList').val()+"&destinationName="+destination+"&trucktype="+trucktype+"&sourceName="+source,
+					data: "companyID="+$('#companyName').val()+"&destinationName="+destinationName+"&trucktype="+trucktype+"&sourceName="+sourceName,
 					success: function(data){
 						$("span.message").text(data);
 						setTimeout(function(){ 
@@ -117,37 +285,37 @@ $(document).ready(function(){
 		e.preventDefault();
 
 	});
-	$("#admin #source").change(function(){
+	$("#admin #sourceName").change(function(){
 		if($(this).val() == "other2")
 		{
 			$(this).parent().next().toggle();
-			$(this).parent().next().next().toggle();
+			$(this).parent().next().next().next().toggle();
 			$(this).parent().toggle();
 			$(this).val("chose2");
 		}
 		
 	});
 	$("#admin #listSource").click(function(){
-		$(this).parent().prev().toggle();
-		$(this).parent().prev().prev().find("select").val("chose2");
 		$(this).parent().prev().prev().toggle();
+		$(this).parent().prev().prev().prev().find("select").val("chose2");
+		$(this).parent().prev().prev().prev().toggle();
 		$(this).parent().toggle();
 	});
 	
-	$("#admin #dest").change(function(){
+	$("#admin #destinationName").change(function(){
 		if($(this).val() == "other3")
 		{
-			$(this).parent().parent().next().toggle();
-			$(this).parent().parent().next().next().toggle();
-			$(this).parent().parent().toggle();
+			$(this).parent().next().toggle();
+			$(this).parent().next().next().next().toggle();
+			$(this).parent().toggle();
 			$(this).val("chose3");
 		}
 		
 	});
 	$("#admin #listDestination").click(function(){
-		$(this).parent().prev().toggle();
-		$(this).parent().prev().prev().find("select").val("chose3");
 		$(this).parent().prev().prev().toggle();
+		$(this).parent().prev().prev().prev().find("select").val("chose3");
+		$(this).parent().prev().prev().prev().toggle();
 		$(this).parent().toggle();
 	});
 	
@@ -156,11 +324,12 @@ $(document).ready(function(){
 		$(".transporter").hide();
 		$(this).next().toggle();
 		id = $(this).attr("id");
-		username = $(this).attr("name");
+		
 		if(id == "viewTrucks"){
 			var div=$(this).next();
+			username = $("#transport #userName").val();
 			$.ajax({
-				url: "/RNA/ViewData",
+				url: "/RNA/viewTransporterTrucks",
 				type: "POST",
 				data: "username="+username,
 				success: function(data){
@@ -176,20 +345,20 @@ $(document).ready(function(){
 	
 	$("#registerTruck").click(function(){
 		var flag=0;
-		if($("#trucktype").val() == "chose" || $("#trucktype").val() == null)
+		if($("#trucktype").val() == null)
 		{
-			$("#truckType").text("Chose a truck type !");
+			$("#truckTypeError").text("Chose a truck type !");
 			flag=1;
 		}
-		if($("#source").val() == "chose2" || $("#source").val() == null)
+		if($("#sourceName").val() == null)
 		{	
-			$("#sourceName").text("Chose a source !");
+			$("#sourceError").text("Chose a source !");
 			flag=1;
 		}
 		
-		if($("#dest").val() == "chose3" || $("#dest").val() == null)
+		if($("#destinationName").val() == null)
 		{	
-			$("#destinationName").text("Chose a destination !");
+			$("#destinationError").text("Chose a destination !");
 			flag=1;
 		}
 		$("input[type=text]").each(function(){
@@ -200,18 +369,18 @@ $(document).ready(function(){
 			}
 		});
 		
-		if($("#dest").val() == $("#source").val() &&  $("#source").val() != null){
+		if($("#destinationName").val() == $("#sourceName").val() &&  $("#sourceName").val() != null){
 			alert("Source and Destination can't be same !")
 			flag=1;
 		}
 		if(flag == 0){
 			
-			 var username = $("#userName").val();
+			 var username = $("#transport #userName").val();
 			 var div = $(this).parent();
 			 $.ajax({
 					url: "/RNA/registerTruck",
 					type: "POST",
-					data: "destinationName="+$("#dest").val()+"&trucktype="+$("#trucktype").val()+"&pan="+$("#pan").val()+"&sourceName="+$("#source").val()+"&reg="+$("#reg-no").val()+"&driver_name="+$("#name").val()+"&driver_mobile="+$("#mobile").val()+"&userName="+username,
+					data: "destinationName="+$("#destinationName").val()+"&trucktype="+$("#trucktype").val()+"&panNumber="+$("#panNumber").val()+"&sourceName="+$("#sourceName").val()+"&registerationNumber="+$("#registerationNumber").val()+"&driver_name="+$("#driver-name").val()+"&driver_mobile="+$("#driver-mobile").val()+"&userName="+username,
 					success: function(data){
 						$("span.message").text(data);
 						setTimeout(function(){ 
@@ -222,25 +391,25 @@ $(document).ready(function(){
 				});
 		}
 	});
-	$("#transport input, #transport select, #admin input, #admin select").each(function(){
+	$("#transport input, #transport select, #admin input, #admin select, #adminLoginForm input").each(function(){
 		$(this).focus(function(){
-			$(this).parent().next().children().text("");
+			$("span.error, span.error_message").text("");
 		});
 	});
 	$("#company li").click(function(){
 		
-		var id, c_id;
+		var id, companyId;
 		$(".company").hide();
 		$(this).next().toggle();
 		id = $(this).attr("id");
-		c_id = $("#c_id").val();
+		companyId = $("#companyId").val();
 		
 		if(id == "viewBooking"){
 			var div=$(this).next();
 			$.ajax({
-				url: "/RNA/ViewBooking",
+				url: "/RNA/viewCompanyBookings",
 				type: "POST",
-				data: "c_id="+c_id,
+				data: "companyId="+companyId,
 				success: function(data){
 					div.html(data);
 					setTimeout(function(){ 
@@ -255,7 +424,7 @@ $(document).ready(function(){
 			$.ajax({
 				url: "/RNA/ViewCompany",
 				type: "POST",
-				data: "c_id="+c_id,
+				data: "companyId="+companyId,
 				success: function(data){
 					div.html(data);
 					setTimeout(function(){ 
@@ -268,43 +437,39 @@ $(document).ready(function(){
 	});
 	
 	
-	$(".company #source").change(function(){
-		
-		id1="#sourceLocation";
-		first = "sourceId";
-		second = "destinationId";
-		id2 = "#dest";
-			
-		var source = $(".company #source").val(); 
+	$(".company #sourceName").change(function(){
+
+		var source = $(".company #sourceName").val(); 
 		
 		$(this).parent().parent().next().show();
 		$(this).parent().parent().next().find(".sourceLocation").show();
 		$(this).parent().parent().next().find(".srcaddressAdd").hide();
-		$(".company #dest").attr("disabled",false);
+		$(".company #destinationName").attr("disabled",false);
+		
 		$.ajax({
-			url: "/RNA/bookTruckFunction1",
+			url: "/RNA/getLocationAddress",
 			type: "POST",
-			data: "param1="+first+"&param2="+second+"&location="+$(this).val()+"&c_id="+$("#c_id").val(),
+			data: "companyId="+$("#companyId").val()+"&location="+$(this).val(),
 			success: function(data){
-				$(id2).html(data);
+				$("#sourceAddress").html(data);
+				$.ajax({
+					url: "/RNA/getDestinationName",
+					type: "POST",
+					data: "sourceName="+$("#sourceName").val()+"&companyId="+$("#companyId").val(),
+					success: function(data){
+						$("#destinationName").html(data);
+					}
+				});
 			}
 		});
 		
-		$.ajax({
-			url: "/RNA/bookTruckFunction2",
-			type: "POST",
-			data: "c_id="+$("#c_id").val()+"&location="+$(this).val(),
-			success: function(data){
-				$("#sourceAddress").html(data);
-			}
-		});
 		
 	});
 	
 	$("td .srcaddAddress").click(function(){
 		if($(this).text()=="Add Location")
 		{
-			$("#srcCity").val($(".company #source").val());
+			$("#srcCity").val($(".company #sourceName").val());
 			$(this).parent().parent().find(".sourceLocation").hide();
 			$(this).parent().parent().find(".srcaddressAdd").show();
 		}
@@ -334,15 +499,15 @@ $(document).ready(function(){
 			var elem2 = $(this).parent().parent().find(".srcaddressAdd");
 			address = address.substring(0, address.length);
 			$.ajax({
-				url: "/RNA/bookTruckFunction3",
+				url: "/RNA/addLocationAddress",
 				type: "POST",
-				data: "address="+address+"&city="+$("#srcCity").val()+"&c_id="+$("#c_id").val(),
+				data: "address="+address+"&location="+$("#srcCity").val()+"&companyId="+$("#companyId").val(),
 				success: function(data){
 					elem.text(data);
 					$.ajax({
-						url: "/RNA/bookTruckFunction2",
+						url: "/RNA/getLocationAddress",
 						type: "POST",
-						data: "c_id="+$("#c_id").val()+"&location="+$("#srcCity").val(),
+						data: "companyId="+$("#companyId").val()+"&location="+$("#srcCity").val(),
 						success: function(data){
 							$("#sourceAddress").html(data);
 						}
@@ -357,37 +522,36 @@ $(document).ready(function(){
 		}
 	});
 	
-	$(".company #dest").change(function(){
+	$(".company #destinationName").change(function(){
 			
-		var dest = $(".company #dest").val(); 
+		var destinationName = $(".company #destinationName").val(); 
 		
 		$(this).parent().parent().next().show();
-		$(this).parent().parent().next().find(".destLocation").show();
-		$(this).parent().parent().next().find(".destaddressAdd").hide();
+		$(this).parent().parent().next().find(".destinationLocation").show();
+		$(this).parent().parent().next().find(".destinationaddressAdd").hide();
 		
 		$.ajax({
-			url: "/RNA/bookTruckFunction2",
+			url: "/RNA/getLocationAddress",
 			type: "POST",
-			data: "c_id="+$("#c_id").val()+"&location="+$(this).val(),
+			data: "companyId="+$("#companyId").val()+"&location="+$(this).val(),
 			success: function(data){
-				$("#destAddress").html(data);
+				$("#destinationAddress").html(data);
+				$.ajax({
+					url: "/RNA/getTruckType",
+					type: "POST",
+					data: "companyId="+$("#companyId").val()+"&destinationName="+$("#destinationName").val()+"&sourceName="+$("#sourceName").val(),
+					success: function(data){
+						$("#trucktype").html(data);
+					}
+				});
 			}
 		});
-		$.ajax({
-			url: "/RNA/bookTruckFunction4",
-			type: "POST",
-			data: "c_id="+$("#c_id").val()+"&dest="+$(this).val()+"&source="+$("#source").val(),
-			success: function(data){
-				$("#trucktype").html(data);
-			}
-		});
-		
 	});
 	
 	$("td .destaddAddress").click(function(){
 		if($(this).text()=="Add Location")
 		{
-			$("#destCity").val($(".company #dest").val());
+			$("#destCity").val($(".company #destinationName").val());
 			$(this).parent().parent().find(".destLocation").hide();
 			$(this).parent().parent().find(".destaddressAdd").show();
 		}
@@ -413,21 +577,21 @@ $(document).ready(function(){
 		});
 		if(flag == 0){
 			var elem = $(this).parent().next().children().next();
-			var elem1 = $(this).parent().parent().find(".destLocation");
+			var elem1 = $(this).parent().parent().find(".destinationLocation");
 			var elem2 = $(this).parent().parent().find(".destaddressAdd");
 			address = address.substring(0, address.length);
 			$.ajax({
-				url: "/RNA/bookTruckFunction3",
+				url: "/RNA/addLocationAddress",
 				type: "POST",
-				data: "address="+address+"&city="+$("#destCity").val()+"&c_id="+$("#c_id").val(),
+				data: "address="+address+"&city="+$("#destCity").val()+"&companyId="+$("#companyId").val(),
 				success: function(data){
 					elem.text(data);
 					$.ajax({
-						url: "/RNA/bookTruckFunction2",
+						url: "/RNA/getLocationAddress",
 						type: "POST",
-						data: "c_id="+$("#c_id").val()+"&location="+$("#destCity").val(),
+						data: "companyId="+$("#companyId").val()+"&location="+$("#destCity").val(),
 						success: function(data){
-							$("#destAddress").html(data);
+							$("#destinationAddress").html(data);
 						}
 					});
 					setTimeout(function(){ 
@@ -441,29 +605,29 @@ $(document).ready(function(){
 	});
 	
 	$("#company select, #company input").focus(function(){
-		$(".company #sourceName, .company #destinationName, .company #srcloc, .company #destloc, .company #truckType, .company #bookingDate").text("");
+		$(".company #sourceError, .company #destinationError, .company #srcloc, .company #destloc, .company #truckTypeError, .company #bookingDateError").text("");
 	});
 	
 	$("#booktruck").click(function(){
 		var flag=0;
 		if($(".company #trucktype").val() == null)
 		{
-			$(".company #truckType").text("Chose a truck type !");
+			$(".company #truckTypeError").text("Chose a truck type !");
 			flag=1;
 		}
-		if($(".company #source").val() == null)
+		if($(".company #sourceName").val() == null)
 		{	
-			$(".company #sourceName").text("Chose a source !");
+			$(".company #sourceError").text("Chose a source !");
 			flag=1;
 		}
 		
-		if($(".company #dest").val() == null)
+		if($(".company #destinationName").val() == null)
 		{	
-			$(".company #destinationName").text("Chose a destination !");
+			$(".company #destinationError").text("Chose a destination !");
 			flag=1;
 		}
 
-		if($(".company #destAddress").val() == null)
+		if($(".company #destinationAddress").val() == null)
 		{	
 			$(".company #destloc").text("Chose a location for the above destination !");
 			flag=1;
@@ -475,14 +639,14 @@ $(document).ready(function(){
 			flag=1;
 		}
 		
-		if($(".company #dest").val() == $(".company #source").val() && $(".company #source").val() != null){
+		if($(".company #destinationName").val() == $(".company #sourceName").val() && $(".company #sourceName").val() != null){
 			alert("Source and Destination can't be same !")
 			flag=1;
 		}
 		
-		if($("#company #txtdate").val() == "")
+		if($("#company #bookingDate").val() == "")
 		{	
-			$(".company #bookingDate").text("Chose the date !");
+			$(".company #bookingDateError").text("Chose the date !");
 			flag=1;
 		}
 		
@@ -492,7 +656,7 @@ $(document).ready(function(){
 			 $.ajax({
 				url: "/RNA/bookTruck",
 				type: "POST",
-				data: "destination="+$(".company #dest").val()+"&trucktype="+$("#trucktype").val()+"&bookingDate="+$(".company #txtdate").val()+"&source="+$(".company #source").val()+"&srcloc="+$(".company #sourceAddress").val()+"&destloc="+$(".company #destAddress").val()+"&c_id="+$("#c_id").val(),
+				data: "destinationName="+$(".company #destinationName").val()+"&trucktype="+$("#trucktype").val()+"&bookingDate="+$(".company #bookingDate").val()+"&sourceName="+$(".company #sourceName").val()+"&sourceAddress="+$(".company #sourceAddress").val()+"&destinationAddress="+$(".company #destinationAddress").val()+"&companyId="+$("#companyId").val(),
 				success: function(data){
 					if(data == '1'){
 						x = confirm("You have already made a same type of booking earlier!, Do you want to book an another ?");
@@ -528,8 +692,7 @@ $(document).ready(function(){
 			var i=0;
 			$(".company .companyDetails").each(function(){
 				$(this).attr("contenteditable","false");
-				if($(this).text() == "")
-					$(this).text(arr[i]);
+				$(this).text(arr[i]);
 				i++;
 			});
 			$(this).prev().hide();
@@ -556,7 +719,7 @@ function againbook(x, div){
 		$.ajax({
 			url: "/RNA/forceBookTruck",
 			type: "POST",
-			data: "destination="+$(".company #dest").val()+"&trucktype="+$("#trucktype").val()+"&bookingDate="+$(".company #txtdate").val()+"&source="+$(".company #source").val()+"&srcloc="+$(".company #sourceAddress").val()+"&destloc="+$(".company #destAddress").val()+"&c_id="+$("#c_id").val(),
+			data: "destinationName="+$(".company #destinationName").val()+"&trucktype="+$("#trucktype").val()+"&bookingDate="+$(".company #bookingDate").val()+"&sourceName="+$(".company #sourceName").val()+"&srcloc="+$(".company #sourceAddress").val()+"&destloc="+$(".company #destinationAddress").val()+"&companyId="+$("#companyId").val(),
 			success: function(data){
 				$("span.message").text(data);
 				setTimeout(function(){ 
